@@ -18,24 +18,32 @@ def ping():
     return "Pong", 200
 
 def ping_loop():
+    main_ping_timer = 0
+
     while True:
-        try:
-            print("Pinging main app...")
-            r1 = requests.get(MAIN_APP_URL)
-            print(f"Main app response: {r1.status_code}")
-        except Exception as e:
-            print(f"Error pinging main app: {e}")
-        
+        # Self-ping every 5 minutes
         try:
             print("Pinging self...")
-            r2 = requests.get(PING_BOT_URL)
-            print(f"Self response: {r2.status_code}")
+            r_self = requests.get(PING_BOT_URL)
+            print(f"Self ping status: {r_self.status_code}")
         except Exception as e:
-            print(f"Error pinging self: {e}")
+            print(f"Self ping failed: {e}")
 
-        time.sleep(300)  # 5 minutes
+        # Ping main app every 10 minutes
+        if main_ping_timer >= 10:
+            try:
+                print("Pinging main app...")
+                r_main = requests.get(MAIN_APP_URL)
+                print(f"Main app ping status: {r_main.status_code}")
+            except Exception as e:
+                print(f"Main app ping failed: {e}")
+            main_ping_timer = 0
+        else:
+            main_ping_timer += 5  # Increment timer
 
-# Start the background ping loop
+        time.sleep(300)  # Sleep for 5 minutes (300 seconds)
+
+# Start the background thread
 def start_background_thread():
     thread = threading.Thread(target=ping_loop, daemon=True)
     thread.start()
