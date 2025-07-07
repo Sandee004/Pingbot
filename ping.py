@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 # Replace with your main Render app URL
 MAIN_APP_URL = "https://dcraft-backend.onrender.com/ping"
-PING_BOT_URL = "https://your-ping-bot.onrender.com/ping"
+PING_BOT_URL = "https://pingbot-sey2.onrender.com/ping"
 
 @app.route('/')
 def home():
